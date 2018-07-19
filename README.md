@@ -49,3 +49,4 @@ For each of these, the user will be able to view items on the map, search for ne
 2. [Housing Unit Estimates](https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html)
 3. Layout Powerpoint file - visualization of the layout
 4. [Udacity FEND GitHub](https://github.com/udacity/fend-office-hours/tree/master/Javascript%20Design%20Patterns/P5%20Project%20Overview)
+5. [NavBar Advanced Search modified from this example](https://bootsnipp.com/snippets/featured/collapse-filters-panel)

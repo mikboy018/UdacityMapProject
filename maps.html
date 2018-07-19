@@ -5,6 +5,98 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="#">Udacity Map Project by Mike Boyer</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="	#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">	
+	    <span class="navbar-toggler-icon"></span>	
+	  </button>	
+	
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    <ul class="navbar-nav mr-auto">
+	      <li class="nav-item active">
+	        <a class="nav-link" href="#">Sample Locations<span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">User Defined Locations</a>
+	      </li>
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">	
+	          Location Options	
+	        </a>	
+	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
+	          <a class="dropdown-item" href="#">Display Locations</a>
+	          <a class="dropdown-item disabled" href="#">Cusomize Locations</a>
+	          <a class="dropdown-item" href="#">Drawing Tools</a>	
+	          <div class="dropdown-divider"></div>	
+	          <a class="dropdown-item" href="#">View Census Data</a>
+	          <a class="dropdown-item" href="#">Route Planning</a>	
+	        </div>	
+	      </li>	
+	      <li class="nav-item">	
+	        <a	class="nav-link" href="https://github.com/mikboy018/UdacityMapProject">Find this on GitHub</a>	
+	      </li>
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">	
+	          Search Options	
+	        </a>	
+	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
+	          <a class="dropdown-item" href="#">Zoom to Area</a>
+	          <div class="btn-group dropright">
+  				<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    				Search Within
+  				</button>
+  			  <div class="dropdown-menu">
+    			<a href="#" class="dropdown-item">10 Min</a>
+  			  </div>
+			</div>
+	          <a class="dropdown-item" href="#">Search for Nearby Places</a>	
+	        </div>	
+	      </li>		
+	    </ul>
+	    	<div class="row">
+		<div class="col-md-12">
+            <div class="input-group" id="adv-search">
+                <input type="text" class="form-control" placeholder="Search" />
+                <div class="input-group-btn">
+                    <div class="btn-group" role="group">
+                        <div class="dropdown dropdown-lg">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <form class="form-horizontal" role="form">
+                                  <div class="form-group">
+                                    <label for="filter">Search within </label>
+                                    <select class="form-control">
+                                        <option value="10" selected>10 min</option>
+                                        <option value="15">15 min</option>
+                                        <option value="30">30 min</option>
+                                        <option value="60">60 min</option>
+                                    </select>
+                                    <select class="form-control">
+                                        <option value="DRIVING" selected>drive</option>
+                                        <option value="WALKING">walk</option>
+                                        <option value="BICYCLING">bike ride</option>
+                                        <option value="TRANSIT">transit</option>
+                                    </select>
+                                    <span> of </span>
+                                    <input class="form-control" type="text" placeholder="Address/Area" />
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="contain">Search for nearby places</label>
+                                    <input class="form-control" type="text" placeholder="Address/Area"/>
+                                  </div>
+                                  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true">Go</span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true">Search</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>		
+	  </div>
+	</nav>
+
 	<div class="container">
 		
 		<div class="options-box">
