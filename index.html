@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Udacity Map Project by Mike Boyer</title>
+	<!-- Load Bootstrap and jQuery UI CSS-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://use.fontawesome.com/28ba79c2cf.js"></script>
+</head>
+<body>
+<!-- load navbar -->
+  <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="#">Udacity Map Project</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="	#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">	
+	    <span class="navbar-toggler-icon"></span>	
+	  </button>	
+	
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    <ul class="navbar-nav mr-auto">
+	      <li class="nav-item active">
+	        <a class="nav-link" href="#">Sample Locations<span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">User Defined Locations</a>
+	      </li>
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">	
+	          <i class="fa fa-map-marker" aria-hidden="true"></i> Location Options	
+	        </a>
+	        <!-- Drop down menu controls search functions -->	
+	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
+	          <a class="dropdown-item" href="#"> <i class="fa fa-map" aria-hidden="true"></i> 
+ Display Locations</a>
+	          <a class="dropdown-item disabled" href="#"><i class="fa fa-tasks" aria-hidden="true"></i>
+ Customize Locations</a>
+	          <a class="dropdown-item" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+ Drawing Tools</a>	
+	          <div class="dropdown-divider"></div>	
+	          <a class="dropdown-item" href="#"><i class="fa fa-users" aria-hidden="true"></i>
+ View Census Data</a>
+	          <a class="dropdown-item" href="#"><i class="fa fa-road" aria-hidden="true"></i>
+ Route Planning</a>	
+	        </div>	
+	      </li>
+	      <li class="nav-item dropdown">
+	      	<a class="nav-link dropdown-item" href="#">Show Imported data</a>
+	      </li>	
+        </ul>
+      </div>
+  </nav>
+
+<!-- load container, which holds the map and menus -->
+<div data-bind="foreach: locations">
+  <div class="map" data-bind="googlemap: { latitude: latitude, longitude: longitude }"></div>
+</div>
+
+<div class="modal">
+	<div class="modal-body">
+		<div data-bind="foreach: locns">
+			<span>Location: </span><span data-bind="text: name"></span><br/>
+		</div>
+	</div>
+</div>
+
+<!-- Load jQuery, Popper, Bootstrap, jQueryUI, Google Maps, KnockoutJS and maps.js-->
+	<script 
+		src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous">
+	</script>
+	<script 
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 	integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" 	
+		crossorigin="anonymous">
+	</script>
+	<script 
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" 
+		integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous">
+	</script>
+	<script
+	    src="https://code.jquery.com/jquery-3.3.1.js"
+	    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	    crossorigin="anonymous">
+	</script>
+	<!-- "https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyCKNznZG1zUyiHyXK6r_HazX5v2Z76Al-0&v=3&callback=initMap"-->
+  	<script 
+  		async defer type="text/javascript" 
+  		src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyCKNznZG1zUyiHyXK6r_HazX5v2Z76Al-0&v=3&callback=initMap">
+  	</script>
+  	<script 
+  		type='text/javascript' 
+  		src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js'>
+  	</script>
+  	<script 
+  		src="js/maps.js">
+  	</script>
+</body>
+</html>

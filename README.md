@@ -14,6 +14,7 @@ Developed with:
 6. [SnazzyMaps](https://snazzymaps.com/)
 7. [D3.JS](https://d3js.org/)
 8. [Bootstrap](https://getbootstrap.com/)
+9. [FontAwesome](https://fontawesome.com/v4.7.0/icons/)
 
 The objective of the project is to develop a single page application featuring a map of a neighborhood I would like to visit. Functionality will include:
 	*	Highlighted Locations
@@ -50,3 +51,7 @@ For each of these, the user will be able to view items on the map, search for ne
 3. Layout Powerpoint file - visualization of the layout
 4. [Udacity FEND GitHub](https://github.com/udacity/fend-office-hours/tree/master/Javascript%20Design%20Patterns/P5%20Project%20Overview)
 5. [NavBar Advanced Search modified from this example](https://bootsnipp.com/snippets/featured/collapse-filters-panel)
+6. [jQueryUI Sortable](https://www.tutorialspoint.com/jqueryui/jqueryui_sortable.htm)
+7. [KnockoutJS with Google Maps Example](http://jsfiddle.net/stesta/2T3Db/)
+8. [Import from CSV](https://www.c-sharpcorner.com/article/knockoutjs-upload-csv/)
+

@@ -23,12 +23,13 @@ h1 {
 #hide-listings, #show-listings {
     width: 48%;
 }
-#map {
+.map {
     bottom:0px;
-    height: 100%;
-    left: 362px;
+    left: 0;
     position: absolute;
-    right: 0px;
+    right: 0;
+    top: 0;
+    margin-top: 50px;
 }
 .options-box {
     background: #fff;
