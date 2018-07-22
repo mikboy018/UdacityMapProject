@@ -173,10 +173,11 @@ function importSamples(){
   });
 
   function processData(text){
+    console.log(typeof text);
+    console.log(text);
     var allLines = text.split(/\r\n|\n/);
     var headers = text[0].split(',');
     
-
     for (var i = 1; i < allLines.length; i++){
       var data = allLines.split(',');
       if (data.length == headers.length) {
