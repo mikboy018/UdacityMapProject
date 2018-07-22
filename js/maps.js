@@ -6,7 +6,7 @@
 //var polygon = null;
 //var area = "";
 
-var locns = ko.observableArray();
+
 var fileLocn = "src/sampleLocn.csv";
 
 function initMap() { 
@@ -130,6 +130,7 @@ function initMap() {
   }
 };
 
+
 var sampleLocationCenter = {
   locations: ko.observableArray([{
       name: "The Bourbon Trail",
@@ -142,15 +143,18 @@ var sampleLocationCenter = {
 //Center the map
 ko.applyBindings(sampleLocationCenter);
 // Load csv to observablesArray
-locns = importSamples();
-// Add markers per selected array
+var locns = {
+	locnModel: ko.observableArray([])
+  } 
 }
 
-// Imports sampleLocations.csv, adds them to observable array
-function importSamples(){
-
-  var lines = ko.observableArray();
+function locnModel(){
   
+  var self = this;
+
+  self.addr = [
+
+  ];
   this.name = ko.observable();
   this.streetNbr = ko.observable();
   this.street = ko.observable();
@@ -161,6 +165,18 @@ function importSamples(){
   this.address = ko.computed(function (){
     return this.name + " " + this.streetNbr + " " + this.street + " " + this.city + ", " + this.state + " " + this.zip
   }, this);
+
+
+
+importSamples();
+// Add markers per selected array
+}
+
+// Imports sampleLocations.csv, adds them to observable array
+function importSamples(){
+
+  var lines = ko.observableArray();
+  
   
   // Load file
   $(document).ready(function(){
@@ -173,27 +189,50 @@ function importSamples(){
   });
 
   function processData(text){
-    console.log(typeof text);
-    console.log(text);
-    var allLines = text.split(/\r\n|\n/);
-    var headers = text[0].split(',');
-    
-    for (var i = 1; i < allLines.length; i++){
-      var data = allLines.split(',');
-      if (data.length == headers.length) {
-        var temp =[];
 
-        for (var j = 0; j < headers.length; j++) {
-          temp.push(headers[j] +":" + data[j]);
-        }
-        lines.push(temp);
-      }
+    var allLines = text.split(/\r\n|\n/);
+    //var headers = text[0].split(',');
+    var entry = allLines.toString().split(',');
+    console.log(typeof allLines);
+    console.log(" was allLines");
+    /*
+    for (var i = 1; i < allLines.length; i = i + 6){
+      
+        name = allLines[i];
+        streetNbr = allLines[i+1];
+        street = allLines[i+2];
+        city = allLines[i+3];
+        state = allLines[i+4];
+        zip = allLines[i+5];
+        console.log(name);
+    }*/
+    //console.log(lines);
+    	//console.log(entry);
+    for (var j = 1; j < entry.length; j = j + 6){
+    		
+    		//console.log(entry[j]);
+    		var name = entry[j];
+    		var streetNbr = entry[j+1];
+    		var street = entry[j+2];
+    		var city = entry[j+3];
+    		var state = entry[j+4];
+    		var zip = entry[j+5];
+    		locns.locnModel.push( new locnModel()
+    			.name(name)
+    			.streetNbr(streetNbr)
+    			.street(street)
+    			.city(city)
+    			.state(state
+    			.zip(zip)
+    		));
+
     }
-    console.log(lines);
+
+    //console.log(lines);
   }
   
-  return lines;
-
+  //return lines;
+  ko.applyBindings(locns);
 }
 
 

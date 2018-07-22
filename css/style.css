@@ -23,7 +23,7 @@ h1 {
 #hide-listings, #show-listings {
     width: 48%;
 }
-.map {
+#map {
     bottom:0px;
     left: 0;
     position: absolute;
