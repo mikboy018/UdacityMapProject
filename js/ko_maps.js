@@ -1,109 +1,9 @@
 
 var fileLocn = "src/sampleLocn.csv";
+var addr = ko.observableArray([]);
 
-
-$(document).ready(function() {
-console.log("ready!");
-
-
-
-AddressesViewModel();
-
-var locnVM = {
-    AddressesViewModel: ko.observableArray([])
-}
-
-
-
-/*
-var masterVM = {
-    vmA : sampleLocationCenter,
-    vmB : locnVM
-}*/
-
-//ko.applyBindings(masterVM);
-//Center the map
-//ko.applyBindings(sampleLocationCenter);
-initMap();
-
-ko.applyBindings(locnVM);
-
-});
-
-// Overall viewmodel for this screen, along with initial state
-function AddressesViewModel() {
-    console.log("loading view model");
-    var self = this;
-    self.addr = ko.observableArray([]);
-
-    // Pull data from csv
-    var lines = ko.observableArray([]);
-
-    function concantAddr(streetNbr,street,city,state,zip){
-        var conAddr = streetNbr + " " + street + ", " + city + ", " + state + " " + zip;
-
-        return conAddr;
-    }
-
-
-  // Load file
-  function loadFile(){
-    $.ajax({
-      type: "GET",
-      url: fileLocn,
-      dataType: "text",
-      success: function(data) { processData(data) }
-    });
-  };
-
-  function processData(text){
-
-    var allLines = text.split(/\r\n|\n/);
-    //var headers = text[0].split(',');
-    var entry = allLines.toString().split(',');
-    //console.log(typeof allLines);
-    //console.log(" was allLines");
-    /*
-    for (var i = 1; i < allLines.length; i = i + 6){
-      
-        name = allLines[i];
-        streetNbr = allLines[i+1];
-        street = allLines[i+2];
-        city = allLines[i+3];
-        state = allLines[i+4];
-        zip = allLines[i+5];
-        console.log(name);
-    }*/
-    //console.log(lines);
-        //console.log(entry);
-    for (var j = 6; j < entry.length-1; j = j + 6){
-            
-        //console.log(entry[j]);
-        var lname = entry[j];
-        console.log("name: " + lname);
-        var streetNbr = entry[j+1];
-        var street = entry[j+2];
-        var city = entry[j+3];
-        var state = entry[j+4];
-        var zip = entry[j+5];
-        var conAddress = concantAddr(streetNbr,street,city,state,zip);
-        //console.log(name);
-        //console.log(conAddress);
-        addr.push(new address(lname, conAddress));
-
-    }   
-    for (var k = 0; k < addr().length; k++){
-        console.log(addr()[k]);
-    }
-
-  }
-  loadFile();
-
-}
-
-function initMap() { 
-  
-  var styles = [
+var markers = ko.observableArray([]);
+var styles = [
     {
         "featureType": "water",
         "elementType": "geometry",
@@ -207,47 +107,144 @@ function initMap() {
         ]
     }
   ];
-/*
-  ko.bindingHandlers.googlemap = {
-    init: function(element, valueAccessor) {
-      var
-        value = valueAccessor(),
-        latLng = new google.maps.LatLng(value.latitude, value.longitude),
-        mapOptions = {
-          zoom: 10,
-          center: latLng,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          styles: styles
-        },
-        map = new google.maps.Map(element, mapOptions);
-    }
-  };
+var map;
 
-    var sampleLocationCenter = {
-    locations: [{
-        name: "The Bourbon Trail",
-        latitude: 38.2120,
-        longitude: -85.2236
-       }
-    ]}
-*/
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 38.2120, lng: -85.2236 },
-        zoom: 10,
-        styles: styles
-    });
+$(document).ready(function() {
+  console.log("ready!");
+
+  AddressesViewModel();
+
+  var locnVM = {
+    AddressesViewModel: ko.observableArray([]),
+
+    placeMarker : function(addr){
+      console.log("placeMarker Called - # markers: " + markers.length);
+      console.log("map --- " + map)
+      for (var i = 0; i < markers().length; i++) {
+        markers()[i].marker.setMap(map);
+      }
+    }
+  }
+
+  ko.applyBindings(locnVM);
+  //initMap();
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 38.2120, lng: -85.2236 },
+    zoom: 10,
+    styles: styles
+  });
+  console.log("map: " + map);
+  //map = document.getElementById('map');
+
+  
+});
+
+// Set up viewmodel for this screen, along with initial state
+function AddressesViewModel() {
+    //console.log("loading view model");
+    //var self = this;
+    //self.addr = ko.observableArray([]);
+
+    // Pull data from csv
+    //var lines = ko.observableArray([]);
+
+  loadFile(addr);
+
 }
+
 
 // Class to represent a row (address)
 function address(lname, addr) {
     var self = this;
     self.lname = ko.observable(lname);
     self.strAddr = ko.observable(addr);
-/*
-    self.addLocn = function(name, addr){
-        self.name.push(name);
-        self.strAddr.push(addr);
-    }.bind(self);
-  */
-  console.log('address called');
 }
+
+function mrkr(marker){
+    var self = this;
+    self.marker = marker;
+}
+
+//Place markers 
+function geocodeAddress(geocoder, resultsMap, addr) {
+    console.log("called geoCodeAddress, # addresses - " + addr().length);
+   for (var k = 1; k < addr().length; k++){
+        
+        var currName = addr()[k].lname().toString();
+        var currAddr = addr()[k].strAddr().toString();
+        addMarker(k, currName, currAddr, geocoder, resultsMap); 
+        console.log("Markers: " + markers().length);
+    }
+        
+}
+
+function addMarker(i, currName, currAddr, geocoder, map){
+    setTimeout(function(){
+    geocoder.geocode({'address' : currAddr}, function(results, status){
+        if (status === 'OK'){
+            //map.setCenter(results[0].geometry.location);
+            console.log(currName);
+            var marker = new google.maps.Marker({
+                title: currName,
+                id: i,
+                animation: google.maps.Animation.DROP,
+                position: results[0].geometry.location
+            });
+            //console.log("marker title: " + marker.title);
+            markers.push(new mrkr(marker));
+            //console.log(markers().length);
+        } else {
+            alert('Geocode failed due to: ' + result);
+        }
+    });}, 200*i);
+}
+
+
+//Concantenate address values from csv
+
+function concantAddr(streetNbr,street,city,state,zip){
+  var conAddr = streetNbr + " " + street + ", " + city + ", " + state + " " + zip;
+    return conAddr;
+}
+
+  // Load file
+  function loadFile(addr){
+    $.ajax({
+      type: "GET",
+      url: fileLocn,
+      dataType: "text",
+      success: function(data) { processData(data, addr) }
+    });
+  };
+
+  function processData(text, addr){
+    console.log("processing data from csv");
+    var allLines = text.split(/\r\n|\n/);
+    var entry = allLines.toString().split(',');
+    for (var j = 6; j < entry.length-1; j = j + 6){
+            
+        //console.log(entry[j]);
+        var lname = entry[j];
+        //console.log("name: " + lname);
+        var streetNbr = entry[j+1];
+        var street = entry[j+2];
+        var city = entry[j+3];
+        var state = entry[j+4];
+        var zip = entry[j+5];
+        var conAddress = concantAddr(streetNbr,street,city,state,zip);
+        //console.log("Name: " + lname);
+        //console.log(conAddress);
+        addr.push(new address(lname, conAddress));
+
+    }
+    //Making sure address was added   
+    for (var k = 0; k < addr().length; k++){
+        console.log(addr()[k]);
+    }
+
+      var geocoder = new google.maps.Geocoder();
+      console.log("next - add markers");
+      geocodeAddress(geocoder, map, addr);
+
+
+  }

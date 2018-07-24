@@ -30,7 +30,7 @@
 	        </a>
 	        <!-- Drop down menu controls search functions -->	
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-	          <a class="dropdown-item" href="#"> <i class="fa fa-map" aria-hidden="true"></i> Display Locations</a>
+	          <a class="dropdown-item" data-bind="click: placeMarker(addr)" href="#"></span> <i class="fa fa-map" aria-hidden="true"></i> Display Locations</a>
 	          <a class="dropdown-item disabled" href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Customize Locations</a>
 	          <a class="dropdown-item" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Drawing Tools</a>	
 	          <div class="dropdown-divider"></div>	
@@ -46,7 +46,6 @@
 <!-- load container, which holds the map and menus -->
 <div>
   <div id="map">hello map!</div>
-  
 </div>
 
 <div id="dialog" title="Locations">
@@ -77,7 +76,7 @@
 	<!-- "https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyCKNznZG1zUyiHyXK6r_HazX5v2Z76Al-0&v=3&callback=initMap"-->
   	<script 
   		async defer type="text/javascript" 
-  		src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyCKNznZG1zUyiHyXK6r_HazX5v2Z76Al-0&v=3&callback=initMap">
+  		src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyCKNznZG1zUyiHyXK6r_HazX5v2Z76Al-0&v=3">
   	</script>
   	<script 
   		type='text/javascript' 

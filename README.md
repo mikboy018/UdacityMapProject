@@ -54,4 +54,5 @@ For each of these, the user will be able to view items on the map, search for ne
 6. [jQueryUI Sortable](https://www.tutorialspoint.com/jqueryui/jqueryui_sortable.htm)
 7. [KnockoutJS with Google Maps Example](http://jsfiddle.net/stesta/2T3Db/)
 8. [Import from CSV](https://www.c-sharpcorner.com/article/knockoutjs-upload-csv/)
-
+9. [Geocode with Address Example](http://googlemaps.github.io/js-v2-samples/geocoder/singlegeocode.html)
+10. [Google Geocode Example](https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple)
