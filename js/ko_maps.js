@@ -123,6 +123,12 @@ $(document).ready(function() {
       for (var i = 0; i < markers().length; i++) {
         markers()[i].marker.setMap(map);
       }
+    },
+
+    hideMarker : function(addr){
+        for (var i = 0; i < markers().length; i++) {
+            markers()[i].marker.setMap(null);
+        }
     }
   }
 
