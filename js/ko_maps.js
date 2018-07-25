@@ -1,6 +1,7 @@
 
 var fileLocn = "src/sampleLocn.csv";
 var addr = ko.observableArray([]);
+var area = ko.observable("");
 
 var markers = ko.observableArray([]);
 var styles = [
@@ -108,6 +109,8 @@ var styles = [
     }
   ];
 var map;
+var polygon = null;
+var dwgMgr;
 
 $(document).ready(function() {
   console.log("ready!");
@@ -117,7 +120,7 @@ $(document).ready(function() {
   var locnVM = {
     AddressesViewModel: ko.observableArray([]),
 
-    placeMarker : function(addr){
+    placeMarker : function(){
       console.log("placeMarker Called - # markers: " + markers.length);
       console.log("map --- " + map)
       for (var i = 0; i < markers().length; i++) {
@@ -125,11 +128,24 @@ $(document).ready(function() {
       }
     },
 
-    hideMarker : function(addr){
+    hideMarker : function(){
         for (var i = 0; i < markers().length; i++) {
             markers()[i].marker.setMap(null);
         }
+    },
+
+    toggleDrawing : function(){
+      if (dwgMgr.map){
+        dwgMgr.setMap(null);
+        if (polygon !== null) {
+          polygon.setMap(null);
+          area = "";
+        }
+      } else {
+        dwgMgr.setMap(map);
+      }
     }
+
   }
 
   ko.applyBindings(locnVM);
@@ -140,8 +156,33 @@ $(document).ready(function() {
     styles: styles
   });
   console.log("map: " + map);
-  //map = document.getElementById('map');
 
+  //map = document.getElementById('map');
+   dwgMgr = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.POLYGON,
+    drawingControl: true,
+    drawingControlOptions: {
+      position: google.maps.ControlPosition.TOP_LEFT,
+      drawingModes: [google.maps.drawing.OverlayType.POLYGON]
+    }
+  });
+  
+  area = "[placeholder]";
+
+  dwgMgr.addListener('overlaycomplete', function(event){
+      if (polygon) {
+        polygon.setMap(null);
+        //hideMarker(markers);
+      }
+      console.log('listener added');
+
+      dwgMgr.setDrawingMode(null);
+      polygon = event.overlay;
+      polygon.setEditable(true);
+      searchWithinPolygon(polygon, area);
+      polygon.getPath().addListener('set_at', searchWithinPolygon);
+      polygon.getPath().addListener('insert_at', searchWithinPolygon);
+  });
   
 });
 
@@ -155,6 +196,8 @@ function AddressesViewModel() {
     //var lines = ko.observableArray([]);
 
   loadFile(addr);
+
+
 
 }
 
@@ -254,3 +297,39 @@ function concantAddr(streetNbr,street,city,state,zip){
 
 
   }
+
+  function searchWithinPolygon(polygon, area){
+    console.log('searching...');
+    for (var i = 0; i < markers().length; i++){
+      if(polygon !== null){
+        console.log('looking for area');
+        area = retrieveArea(polygon, area);
+      }
+      console.log("lat lng : " + markers()[i].position);
+      if (google.maps.geometry.poly.containsLocation(markers()[i].position, polygon)){
+        markers()[i].setMap(map);
+      } else {
+        markers()[i].setMap(null);
+      }
+    }
+  }
+
+  function retrieveArea(polygon, area){
+    console.log('calculating area');
+    if(polygon === null){
+      area = '';
+      console.log('no polygon');
+    } else {
+      var num = google.maps.geometry.spherical.computeArea(polygon.getPath())
+      if (num) {
+        area = "search area: " + num + " sq m";
+
+        
+      } else {
+        area = "hmm...";
+      }
+      console.log(area);
+      return area
+    }
+  }
+
