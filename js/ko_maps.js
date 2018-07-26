@@ -167,21 +167,22 @@ $(document).ready(function() {
     }
   });
   
-  area("[placeholder]");
+  area("");
 
   dwgMgr.addListener('overlaycomplete', function(event){
       if (polygon !== null) {
         polygon.setMap(null);
         //hideMarker(markers);
       }
-      console.log('listener added');
+      //console.log('listener added');
 
       dwgMgr.setDrawingMode(null);
       polygon = event.overlay;
-      polygon.setEditable(true);
+      polygon.setEditable(false);
+      /* TODO - fix below not recalculating properly
       searchWithinPolygon(polygon, area);
       polygon.getPath().addListener('set_at', searchWithinPolygon);
-      polygon.getPath().addListener('insert_at', searchWithinPolygon);
+      polygon.getPath().addListener('insert_at', searchWithinPolygon);*/
   });
   
 });
@@ -299,7 +300,7 @@ function concantAddr(streetNbr,street,city,state,zip){
   }
 
   function searchWithinPolygon(polygon, area){
-    console.log('searching... ' + markers().length);
+    //console.log('searching... ' + markers().length);
     for (var i = 0; i < markers().length; i++){
       if(polygon !== null){
         //console.log('looking for area');
@@ -315,7 +316,7 @@ function concantAddr(streetNbr,street,city,state,zip){
   }
 
   function retrieveArea(polygon, area){
-    console.log('calculating area');
+    //console.log('calculating area');
     if(polygon === null){
       area("");
       //console.log('no polygon');
