@@ -55,8 +55,8 @@
 <div class="hidden" id="dialog" title="Locations">
   <ul id="sortable" data-bind="foreach: addr">
   	<li>
-  	  <span data-bind="text: lname"></span><br/>
-  	  <span data-bind="text: strAddr"></span>
+  	  <input type="text" placeholder="name" data-bind="value: lname"><br/>
+  	  <input type="text" placeholder="address" data-bind="value: strAddr">
   	</li>
   </ul>
 </div>
