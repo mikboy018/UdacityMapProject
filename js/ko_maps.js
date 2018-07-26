@@ -139,7 +139,7 @@ $(document).ready(function() {
         dwgMgr.setMap(null);
         if (polygon !== null) {
           polygon.setMap(null);
-          area = "";
+          area("");
         }
       } else {
         dwgMgr.setMap(map);
@@ -167,10 +167,10 @@ $(document).ready(function() {
     }
   });
   
-  area = "[placeholder]";
+  area("[placeholder]");
 
   dwgMgr.addListener('overlaycomplete', function(event){
-      if (polygon) {
+      if (polygon !== null) {
         polygon.setMap(null);
         //hideMarker(markers);
       }
@@ -222,7 +222,7 @@ function geocodeAddress(geocoder, resultsMap, addr) {
         var currName = addr()[k].lname().toString();
         var currAddr = addr()[k].strAddr().toString();
         addMarker(k, currName, currAddr, geocoder, resultsMap); 
-        console.log("Markers: " + markers().length);
+        //console.log("Markers: " + markers().length);
     }
         
 }
@@ -232,7 +232,7 @@ function addMarker(i, currName, currAddr, geocoder, map){
     geocoder.geocode({'address' : currAddr}, function(results, status){
         if (status === 'OK'){
             //map.setCenter(results[0].geometry.location);
-            console.log(currName);
+            //console.log(currName);
             var marker = new google.maps.Marker({
                 title: currName,
                 id: i,
@@ -299,17 +299,17 @@ function concantAddr(streetNbr,street,city,state,zip){
   }
 
   function searchWithinPolygon(polygon, area){
-    console.log('searching...');
+    console.log('searching... ' + markers().length);
     for (var i = 0; i < markers().length; i++){
       if(polygon !== null){
-        console.log('looking for area');
+        //console.log('looking for area');
         area = retrieveArea(polygon, area);
       }
-      console.log("lat lng : " + markers()[i].position);
-      if (google.maps.geometry.poly.containsLocation(markers()[i].position, polygon)){
-        markers()[i].setMap(map);
+      //console.log("lat lng : " + markers()[i].marker.position);
+      if (google.maps.geometry.poly.containsLocation(markers()[i].marker.position, polygon)){
+        markers()[i].marker.setMap(map);
       } else {
-        markers()[i].setMap(null);
+        markers()[i].marker.setMap(null);
       }
     }
   }
@@ -317,18 +317,19 @@ function concantAddr(streetNbr,street,city,state,zip){
   function retrieveArea(polygon, area){
     console.log('calculating area');
     if(polygon === null){
-      area = '';
-      console.log('no polygon');
+      area("");
+      //console.log('no polygon');
     } else {
       var num = google.maps.geometry.spherical.computeArea(polygon.getPath())
       if (num) {
-        area = "search area: " + num + " sq m";
+        num = num.toLocaleString('en-US', {minimumFractionDigits: 2});
+        area("search area: " + num + " sq m");
 
         
       } else {
-        area = "hmm...";
+        area("hmm...");
       }
-      console.log(area);
+      //console.log(area());
       return area
     }
   }

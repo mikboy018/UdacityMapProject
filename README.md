@@ -56,3 +56,4 @@ For each of these, the user will be able to view items on the map, search for ne
 8. [Import from CSV](https://www.c-sharpcorner.com/article/knockoutjs-upload-csv/)
 9. [Geocode with Address Example](http://googlemaps.github.io/js-v2-samples/geocoder/singlegeocode.html)
 10. [Google Geocode Example](https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple)
+11. [Number Formatting Example](https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript)
