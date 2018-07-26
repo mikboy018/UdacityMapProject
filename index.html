@@ -53,10 +53,12 @@
 </div>
 
 <div class="hidden" id="dialog" title="Locations">
-  <div data-bind="foreach: addr">
-  	<span data-bind="text: lname"></span><br/>
-  	<span data-bind="text: strAddr"></span><br/>
-  </div>
+  <ul id="sortable" data-bind="foreach: addr">
+  	<li>
+  	  <span data-bind="text: lname"></span><br/>
+  	  <span data-bind="text: strAddr"></span>
+  	</li>
+  </ul>
 </div>
 
 <!-- Load jQuery, Popper, Bootstrap, jQueryUI, Google Maps, KnockoutJS and maps.js-->
@@ -93,6 +95,8 @@
   		$("#seeData").button().on("click", function() {
     		$("#dialog").dialog();
   		} );
+  		$("#sortable").sortable();
   	</script>
+  	
 </body>
 </html>

@@ -155,7 +155,7 @@ $(document).ready(function() {
     zoom: 10,
     styles: styles
   });
-  console.log("map: " + map);
+  //console.log("map: " + map);
 
   //map = document.getElementById('map');
    dwgMgr = new google.maps.drawing.DrawingManager({
@@ -178,11 +178,12 @@ $(document).ready(function() {
 
       dwgMgr.setDrawingMode(null);
       polygon = event.overlay;
+      /* TODO - fix below not recalculating properly */
       polygon.setEditable(false);
-      /* TODO - fix below not recalculating properly
+
       searchWithinPolygon(polygon, area);
       polygon.getPath().addListener('set_at', searchWithinPolygon);
-      polygon.getPath().addListener('insert_at', searchWithinPolygon);*/
+      polygon.getPath().addListener('insert_at', searchWithinPolygon);
   });
   
 });
