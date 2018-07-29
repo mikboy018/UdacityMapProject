@@ -20,6 +20,9 @@ h1 {
     margin: 0 0 10px 0;
     text-align: center;
 }
+ul{
+    list-style: none;
+}
 .hidden{
     display: none;
 }
@@ -65,4 +68,29 @@ h1 {
 }
 .text{
     font-size: 12px;
+}
+.locationName, .address{
+    border: none;
+}
+.locationName{
+    width: 50%;
+}
+.address{
+    width: 75%;
+}
+.locations{
+    margin: 2%;
+    width: 66%;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #4065a0;
+    background-color: white;
+        font-size: x-small;
+
+}
+.locations:before {
+    font-family: 'FontAwesome';
+    content: '\f07d';
+    margin: 0 10px 0 -15px;
+    color: black;
 }

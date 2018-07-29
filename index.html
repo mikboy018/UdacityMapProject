@@ -18,13 +18,7 @@
 	
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
-	      <li class="nav-item active">
-	        <a class="nav-link" href="#">Sample Locations<span class="sr-only">(current)</span></a>
-	      </li>
-	      <li class="nav-item">
-	        <a class="nav-link" href="#">User Defined Locations</a>
-	      </li>
-	      <li class="nav-item dropdown">
+	        <li class="nav-item dropdown">
 	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">	
 	          <i class="fa fa-map-marker" aria-hidden="true"></i> Location Options	
 	        </a>
@@ -32,11 +26,10 @@
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
 	          <a class="dropdown-item" data-bind="click: placeMarker" href="#"></span> <i class="fa fa-map" aria-hidden="true"></i> Display Locations</a>
 	          <a class="dropdown-item" data-bind="click: hideMarker" href="#"></span> <i class="fa fa-map" aria-hidden="true"></i> Hide Locations</a>
-	          <a class="dropdown-item disabled" href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Customize Locations</a>
 	          <a class="dropdown-item" data-bind="click: toggleDrawing" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Drawing Tools</a>	
 	          <div class="dropdown-divider"></div>	
 	          <a class="dropdown-item" href="#"><i class="fa fa-users" aria-hidden="true"></i>  View Census Data</a>
-	          <a class="dropdown-item" href="#"><i class="fa fa-road" aria-hidden="true"></i>  Route Planning</a>	
+	          <a class="dropdown-item" id="seeData" data-bind="click: popUpLocations" href="#"><i class="fa fa-road" aria-hidden="true"></i>  Route Planning</a>	
 	        </div>
 	      </li>
 	      <li class="nav-item">
@@ -53,10 +46,12 @@
 </div>
 
 <div class="hidden" id="dialog" title="Locations">
+  <input type="checkbox"  data-bind="checked: custom, click: allowCustomize" name="customLocations" value="lcustom">
+  <span><i class="fa fa-tasks" aria-hidden="true"></i> Customize Locations</span>
   <ul id="sortable" data-bind="foreach: addr">
-  	<li>
-  	  <input type="text" placeholder="name" data-bind="value: lname"><br/>
-  	  <input type="text" placeholder="address" data-bind="value: strAddr">
+  	<li class="locations">
+  	  <input type="text" class="locationName" placeholder="name" data-bind="value: lname"><br/>
+  	  <input type="text" class="address" placeholder="address" data-bind="value: strAddr">
   	</li>
   </ul>
 </div>
@@ -92,10 +87,7 @@
   		src="js/ko_maps.js">
   	</script>
 	<script>
-  		$("#seeData").button().on("click", function() {
-    		$("#dialog").dialog();
-  		} );
-  		$("#sortable").sortable();
+
   	</script>
   	
 </body>

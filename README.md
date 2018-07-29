@@ -58,3 +58,4 @@ For each of these, the user will be able to view items on the map, search for ne
 10. [Google Geocode Example](https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple)
 11. [Number Formatting Example](https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript)
 12. [Hidden dialog](https://stackoverflow.com/questions/10296628/does-jquery-dialog-display-as-hidden-by-default)
+13. [Replace bullets with fontawesome icons](https://stackoverflow.com/questions/12468359/using-font-awesome-icon-for-bullet-points-with-a-single-list-item-element)

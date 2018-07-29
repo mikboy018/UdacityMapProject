@@ -112,6 +112,8 @@ var map;
 var polygon = null;
 var dwgMgr;
 
+var custom = ko.observable(false);
+
 $(document).ready(function() {
   console.log("ready!");
 
@@ -121,8 +123,8 @@ $(document).ready(function() {
     AddressesViewModel: ko.observableArray([]),
 
     placeMarker : function(){
-      console.log("placeMarker Called - # markers: " + markers.length);
-      console.log("map --- " + map)
+      //console.log("placeMarker Called - # markers: " + markers.length);
+      //console.log("map --- " + map)
       for (var i = 0; i < markers().length; i++) {
         markers()[i].marker.setMap(map);
       }
@@ -190,16 +192,8 @@ $(document).ready(function() {
 
 // Set up viewmodel for this screen, along with initial state
 function AddressesViewModel() {
-    //console.log("loading view model");
-    //var self = this;
-    //self.addr = ko.observableArray([]);
-
-    // Pull data from csv
-    //var lines = ko.observableArray([]);
 
   loadFile(addr);
-
-
 
 }
 
@@ -218,121 +212,125 @@ function mrkr(marker){
 
 //Place markers 
 function geocodeAddress(geocoder, resultsMap, addr) {
-    console.log("called geoCodeAddress, # addresses - " + addr().length);
-   for (var k = 1; k < addr().length; k++){
-        
-        var currName = addr()[k].lname().toString();
-        var currAddr = addr()[k].strAddr().toString();
-        addMarker(k, currName, currAddr, geocoder, resultsMap); 
-        //console.log("Markers: " + markers().length);
-    }
-        
+  //console.log("called geoCodeAddress, # addresses - " + addr().length);
+  for (var k = 1; k < addr().length; k++){
+    var currName = addr()[k].lname().toString();
+    var currAddr = addr()[k].strAddr().toString();
+    addMarker(k, currName, currAddr, geocoder, resultsMap); 
+    //console.log("Markers: " + markers().length);
+  }      
 }
 
 function addMarker(i, currName, currAddr, geocoder, map){
-    setTimeout(function(){
-    geocoder.geocode({'address' : currAddr}, function(results, status){
-        if (status === 'OK'){
-            //map.setCenter(results[0].geometry.location);
-            //console.log(currName);
-            var marker = new google.maps.Marker({
-                title: currName,
-                id: i,
-                animation: google.maps.Animation.DROP,
-                position: results[0].geometry.location
-            });
-            //console.log("marker title: " + marker.title);
-            markers.push(new mrkr(marker));
-            //console.log(markers().length);
-        } else {
-            alert('Geocode failed due to: ' + result);
-        }
+  setTimeout(function(){
+  geocoder.geocode({'address' : currAddr}, function(results, status){
+    if (status === 'OK'){
+      //map.setCenter(results[0].geometry.location);
+      //console.log(currName);
+      var marker = new google.maps.Marker({
+        title: currName,
+        id: i,
+        animation: google.maps.Animation.DROP,
+        position: results[0].geometry.location
+      });
+      //console.log("marker title: " + marker.title);
+      markers.push(new mrkr(marker));
+      //console.log(markers().length);
+      } else {
+        alert('Geocode failed due to: ' + result);
+      }
     });}, 200*i);
 }
-
 
 //Concantenate address values from csv
 
 function concantAddr(streetNbr,street,city,state,zip){
   var conAddr = streetNbr + " " + street + ", " + city + ", " + state + " " + zip;
-    return conAddr;
+  return conAddr;
 }
 
-  // Load file
-  function loadFile(addr){
-    $.ajax({
-      type: "GET",
-      url: fileLocn,
-      dataType: "text",
-      success: function(data) { processData(data, addr) }
-    });
-  };
+// Load file
+function loadFile(addr){
+  $.ajax({
+    type: "GET",
+    url: fileLocn,
+    dataType: "text",
+    success: function(data) { processData(data, addr) }
+  });
+};
 
-  function processData(text, addr){
-    console.log("processing data from csv");
-    var allLines = text.split(/\r\n|\n/);
-    var entry = allLines.toString().split(',');
-    for (var j = 6; j < entry.length-1; j = j + 6){
-            
-        //console.log(entry[j]);
-        var lname = entry[j];
-        //console.log("name: " + lname);
-        var streetNbr = entry[j+1];
-        var street = entry[j+2];
-        var city = entry[j+3];
-        var state = entry[j+4];
-        var zip = entry[j+5];
-        var conAddress = concantAddr(streetNbr,street,city,state,zip);
-        //console.log("Name: " + lname);
-        //console.log(conAddress);
-        addr.push(new address(lname, conAddress));
-
-    }
-    //Making sure address was added   
-    for (var k = 0; k < addr().length; k++){
-        console.log(addr()[k]);
-    }
-
-      var geocoder = new google.maps.Geocoder();
-      console.log("next - add markers");
-      geocodeAddress(geocoder, map, addr);
-
-
+function processData(text, addr){
+  //console.log("processing data from csv");
+  var allLines = text.split(/\r\n|\n/);
+  var entry = allLines.toString().split(',');
+  for (var j = 6; j < entry.length-1; j = j + 6){
+    //console.log(entry[j]);
+    var lname = entry[j];
+    //console.log("name: " + lname);
+    var streetNbr = entry[j+1];
+    var street = entry[j+2];
+    var city = entry[j+3];
+    var state = entry[j+4];
+    var zip = entry[j+5];
+    var conAddress = concantAddr(streetNbr,street,city,state,zip);
+    //console.log("Name: " + lname);
+    //console.log(conAddress);
+    addr.push(new address(lname, conAddress));
   }
+  /*
+  //Making sure address was added   
+  for (var k = 0; k < addr().length; k++){
+    console.log(addr()[k]);
+  }*/
+  var geocoder = new google.maps.Geocoder();
+    //console.log("next - add markers");
+    geocodeAddress(geocoder, map, addr);
+}
 
-  function searchWithinPolygon(polygon, area){
-    //console.log('searching... ' + markers().length);
-    for (var i = 0; i < markers().length; i++){
-      if(polygon !== null){
-        //console.log('looking for area');
-        area = retrieveArea(polygon, area);
-      }
-      //console.log("lat lng : " + markers()[i].marker.position);
-      if (google.maps.geometry.poly.containsLocation(markers()[i].marker.position, polygon)){
-        markers()[i].marker.setMap(map);
-      } else {
-        markers()[i].marker.setMap(null);
-      }
+function searchWithinPolygon(polygon, area){
+  //console.log('searching... ' + markers().length);
+  for (var i = 0; i < markers().length; i++){
+    if(polygon !== null){
+      //console.log('looking for area');
+      area = retrieveArea(polygon, area);
     }
-  }
-
-  function retrieveArea(polygon, area){
-    //console.log('calculating area');
-    if(polygon === null){
-      area("");
-      //console.log('no polygon');
+    //console.log("lat lng : " + markers()[i].marker.position);
+    if (google.maps.geometry.poly.containsLocation(markers()[i].marker.position, polygon)){
+      markers()[i].marker.setMap(map);
     } else {
-      var num = google.maps.geometry.spherical.computeArea(polygon.getPath())
-      if (num) {
-        num = num.toLocaleString('en-US', {minimumFractionDigits: 2});
-        area("search area: " + num + " sq m");
-
-        
-      } else {
-        area("hmm...");
-      }
-      //console.log(area());
-      return area
+      markers()[i].marker.setMap(null);
     }
   }
+}
 
+function retrieveArea(polygon, area){
+  //console.log('calculating area');
+  if(polygon === null){
+    area("");
+    //console.log('no polygon');
+  } else {
+    var num = google.maps.geometry.spherical.computeArea(polygon.getPath())
+
+  if (num) {
+    num = num.toLocaleString('en-US', {minimumFractionDigits: 2});
+    area("search area: " + num + " sq m");
+  } else {
+    area("hmm...");
+  }
+  //console.log(area());
+  return area
+  }
+}
+
+function allowCustomize(){
+    console.log("This will allow me to customize entries by enabling edit and sort for locationName and address inputboxes")
+    $("#sortable").sortable();
+    return true;
+}
+
+function popUpLocations(){
+    $("#dialog").dialog({
+      width: '45%',
+      height: '300'
+    });
+}
