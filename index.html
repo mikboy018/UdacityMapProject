@@ -48,6 +48,8 @@
 <div class="hidden" id="dialog" title="Locations">
   <input type="checkbox"  data-bind="checked: custom, click: allowCustomize" name="customLocations" value="lcustom">
   <span><i class="fa fa-tasks" aria-hidden="true"></i> Customize Locations</span>
+  <input type="button" data-bind="click: searchLocations" value="Search!">
+  <input type="checkbox" databind="checked: optimum"><span> Optimize Waypoints</span>
   <ul id="sortable" data-bind="foreach: addr">
   	<li class="locations">
   	  <input type="text" class="locationName" placeholder="name" data-bind="value: lname"><br/>

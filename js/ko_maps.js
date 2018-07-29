@@ -113,6 +113,7 @@ var polygon = null;
 var dwgMgr;
 
 var custom = ko.observable(false);
+var optimum = ko.observable(false);
 
 $(document).ready(function() {
   console.log("ready!");
@@ -323,8 +324,22 @@ function retrieveArea(polygon, area){
 }
 
 function allowCustomize(){
-    console.log("This will allow me to customize entries by enabling edit and sort for locationName and address inputboxes")
+    //console.log("This will allow me to customize entries by enabling edit and sort for locationName and address inputboxes")
     $("#sortable").sortable();
+    if (custom() == true){
+        console.log("custom is true");
+        $("#sortable").sortable("enable");
+        $(".locations").toggleClass("sort");
+        $(".locationName").prop("disabled", false);
+        $(".address").prop("disabled", false);
+    } else {
+        console.log("custom is false");
+        $("#sortable").sortable("disable");
+        $(".locations").toggleClass("sort");
+        $(".locationName").prop("disabled", true);
+        $(".address").prop("disabled", true);
+    }
+    //custom(true);
     return true;
 }
 
@@ -333,4 +348,37 @@ function popUpLocations(){
       width: '45%',
       height: '300'
     });
+    $(".locations:before").prop("disabled", true);
+    $(".locationName").prop("disabled", true);
+    $(".address").prop("disabled", true);
+}
+
+// update addr obserable array, pass into directionsservice
+function searchLocations(){
+    var tempLName = [];
+    var tempAddress = [];
+    // update addr to match the selected order / name of locations
+    // add names/addresses in order specified by the sortable
+    $(".locations").each( function(idx){
+        var newLName = $(this).children('.locationName').val();
+        var newAddress = $(this).children('.address').val();
+        tempLName.push(newLName);
+        tempAddress.push(newAddress);     
+    });
+    //console.log(tempLName);
+    //iterate through
+    for (var i = 0; i < addr().length; i ++){
+        console.log("observable array: " + addr()[i].lname() +  " | " + addr()[i].strAddr());
+        addr()[i].lname(tempLName[i]);
+        addr()[i].strAddr(tempAddress[i]);
+        //addr.replace(addr()[idx].lname(), newLName);
+        //addr.replace(addr()[idx].strAddr(), newAddress);
+        console.log("observable array: " + addr()[i].lname() +  " | " + addr()[i].strAddr());
+    }
+    // close dialog box
+    $("#dialog").dialog("close");
+    //$("#dialog").dialog("open");
+    // access directions service
+    // display markers
+
 }

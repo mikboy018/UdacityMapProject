@@ -72,6 +72,10 @@ ul{
 .locationName, .address{
     border: none;
 }
+.locationName:disabled, .address:disabled{
+    border: none;
+    background-color: white;
+}
 .locationName{
     width: 50%;
 }
@@ -88,7 +92,7 @@ ul{
         font-size: x-small;
 
 }
-.locations:before {
+.sort:before {
     font-family: 'FontAwesome';
     content: '\f07d';
     margin: 0 10px 0 -15px;
