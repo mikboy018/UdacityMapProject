@@ -111,6 +111,8 @@ var styles = [
 var map;
 var polygon = null;
 var dwgMgr;
+var dirSvc;
+var dirDisp;
 
 var custom = ko.observable(false);
 var optimum = ko.observable(false);
@@ -188,6 +190,12 @@ $(document).ready(function() {
       polygon.getPath().addListener('set_at', searchWithinPolygon);
       polygon.getPath().addListener('insert_at', searchWithinPolygon);
   });
+
+  dirSvc = new google.maps.DirectionsService;
+  dirDisp = new google.maps.DirectionsRenderer;
+  dirDisp.setMap(map);
+
+
   
 });
 
@@ -327,13 +335,13 @@ function allowCustomize(){
     //console.log("This will allow me to customize entries by enabling edit and sort for locationName and address inputboxes")
     $("#sortable").sortable();
     if (custom() == true){
-        console.log("custom is true");
+        //console.log("custom is true");
         $("#sortable").sortable("enable");
         $(".locations").toggleClass("sort");
         $(".locationName").prop("disabled", false);
         $(".address").prop("disabled", false);
     } else {
-        console.log("custom is false");
+        //console.log("custom is false");
         $("#sortable").sortable("disable");
         $(".locations").toggleClass("sort");
         $(".locationName").prop("disabled", true);
@@ -379,6 +387,46 @@ function searchLocations(){
     $("#dialog").dialog("close");
     //$("#dialog").dialog("open");
     // access directions service
+
     // display markers
 
+}
+
+function toggleOptimum() {
+    //console.log("toggle optimum called");
+    return true;
+}
+
+function calcDisplayRoute(){
+    //make first marker the start point, middle markers waypoints, and final marker endpoint
+    var startpt;
+    var waypts = [];
+    var endpt;
+    for (var i = 0; i < 5; i++){
+        if(i == 0){
+            startpt = addr()[i].strAddr().toString();
+        } else if(i == 4){
+            endpt = addr()[i].strAddr().toString();
+        } else {
+            waypts.push({
+                location: addr()[i].strAddr().toString()
+            });
+        }
+        console.log("no " + i + " assigned " + addr()[i].strAddr().toString());
+    }
+
+    dirSvc.route({
+        origin: startpt,
+        destination: endpt,
+        waypoints: waypts,
+        optimizeWaypoints: optimum(),
+        travelMode: 'DRIVING'
+    }, function(response, status) {
+        if(status === 'OK') {
+            dirDisp.setDirections(response);
+            var route = response.routes[0];
+        } else {
+            window.alert('Directions Request Failed, Reason: ' + status);
+        }
+    });
 }
