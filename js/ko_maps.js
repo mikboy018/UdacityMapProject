@@ -271,6 +271,10 @@ function loadFile(addr){
 };
 
 function processData(text, addr){
+  // remove all entries (for resetting)
+  addr.removeAll();
+  custom(false);
+  optimum(false);
   //console.log("processing data from csv");
   var allLines = text.split(/\r\n|\n/);
   var entry = allLines.toString().split(',');
@@ -368,39 +372,6 @@ function popUpLocations(){
     $(".address").prop("disabled", true);
 }
 
-// update addr obserable array, pass into directionsservice
-function searchLocations(){
-    var tempLName = [];
-    var tempAddress = [];
-    // update addr to match the selected order / name of locations
-    // add names/addresses in order specified by the sortable
-    $(".locations").each( function(idx){
-        var newLName = $(this).children('.locationName').val();
-        var newAddress = $(this).children('.address').val();
-        tempLName.push(newLName);
-        tempAddress.push(newAddress);     
-    });
-    //console.log(tempLName);
-    //iterate through
-    for (var i = 0; i < addr().length; i ++){
-        console.log("observable array: " + addr()[i].lname() +  " | " + addr()[i].strAddr());
-        addr()[i].lname(tempLName[i]);
-        addr()[i].strAddr(tempAddress[i]);
-        //addr.replace(addr()[idx].lname(), newLName);
-        //addr.replace(addr()[idx].strAddr(), newAddress);
-        console.log("observable array: " + addr()[i].lname() +  " | " + addr()[i].strAddr());
-    }
-    // close dialog box
-    $( "#sortable" ).sortable( "refresh" );
-    $( "#sortable" ).sortable( "refreshPositions" );
-    //$("#dialog").dialog("close");
-    //$("#dialog").dialog("open");
-    // access directions service
-
-    // display markers
-
-}
-
 function toggleOptimum() {
     //console.log("toggle optimum called");
     return true;
@@ -411,7 +382,7 @@ function calcDisplayRoute(){
     var startpt;
     var waypts = [];
     var endpt;
-    for (var i = 0; i < 5; i++){
+    for (var i = 0; i < locnOrder.length; i++){
         if(i == 0){
             startpt = addr()[locnOrder[i]].strAddr().toString();
         } else if(i == 4){
@@ -421,7 +392,7 @@ function calcDisplayRoute(){
                 location: addr()[locnOrder[i]].strAddr().toString()
             });
         }
-        console.log("no " + i + " assigned " + addr()[locnOrder[i]].lname().toString() + " | " + addr()[locnOrder[i]].strAddr().toString());
+        //console.log("no " + i + " assigned " + addr()[locnOrder[i]].lname().toString() + " | " + addr()[locnOrder[i]].strAddr().toString());
     }
 
     dirSvc.route({
