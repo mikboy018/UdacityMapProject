@@ -113,6 +113,7 @@ var polygon = null;
 var dwgMgr;
 var dirSvc;
 var dirDisp;
+var popUpWindow;
 
 var locnOrder = [];
 
@@ -197,6 +198,10 @@ $(document).ready(function() {
   dirDisp = new google.maps.DirectionsRenderer;
   dirDisp.setMap(map);
 
+  popUpWindow = new google.maps.InfoWindow();
+
+
+
 
   
 });
@@ -244,6 +249,9 @@ function addMarker(i, currName, currAddr, geocoder, map){
         animation: google.maps.Animation.DROP,
         position: results[0].geometry.location
       });
+      marker.addListener('click', function(){
+        populateInfoWindow(this, popUpWindow);
+      })
       //console.log("marker title: " + marker.title);
       markers.push(new mrkr(marker));
       //console.log(markers().length);
@@ -409,4 +417,47 @@ function calcDisplayRoute(){
             window.alert('Directions Request Failed, Reason: ' + status);
         }
     });
+}
+
+function populateInfoWindow(marker, popUpWindow){
+  console.log("display infowindow for " + marker.title);
+  if (popUpWindow.marker != marker) {
+    popUpWindow.setContent('');
+    popUpWindow.marker = marker;
+    //popUpWindow.setContent('<div>'+marker.title+' - '+ marker.position + '</div>');
+    //popUpWindow.open(map, marker);
+    popUpWindow.addListener('closeclick', function(){
+      popUpWindow.marker = null;
+    });
+
+    var streetViewSvc = new google.maps.StreetViewService();
+    var radius = 50;
+
+    function getStreetView(data, status) {
+      //If status is ok (pano found), compute poisition of image, heading, and set options
+      //console.log("DATA: " + data);
+      //console.log("STATUS: " + status);
+      if (status == google.maps.StreetViewStatus.OK){
+        var nearStreetViewLocn = data.location.latLng;
+        var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocn, marker.position);
+        popUpWindow.setContent('<div id="popUp">' + marker.title + ' / ' + marker.position + '</div><div id="pano"></div>');
+        var panoramaOptions = {
+          position: nearStreetViewLocn,
+          pov: {
+            heading: heading,
+            pitch: 30
+          }
+        };
+      
+      var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
+    
+      } else {
+    
+        popUpWindow.setContent('<div>' + marker.title + '</div>' +'<div>No Street View Found</div>');
+      }
+    }    
+    
+    streetViewSvc.getPanoramaByLocation(marker.position, radius, getStreetView); 
+    popUpWindow.open(map, marker);              
+  }
 }
