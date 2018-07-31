@@ -52,7 +52,7 @@
   <input type="checkbox" data-bind="checked: optimum, click: toggleOptimum"><span> Optimize Waypoints</span>
   <input type="button" data-bind="click: calcDisplayRoute" value="Directions">
   <ul id="sortable" data-bind="foreach: addr">
-  	<li class="locations">
+  	<li class="locations" data-bind="attr: { id: $index() }">
   	  <input type="text" class="locationName" placeholder="name" data-bind="value: lname"><br/>
   	  <input type="text" class="address" placeholder="address" data-bind="value: strAddr">
   	</li>

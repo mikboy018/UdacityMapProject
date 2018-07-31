@@ -114,6 +114,8 @@ var dwgMgr;
 var dirSvc;
 var dirDisp;
 
+var locnOrder = [];
+
 var custom = ko.observable(false);
 var optimum = ko.observable(false);
 
@@ -334,6 +336,11 @@ function retrieveArea(polygon, area){
 function allowCustomize(){
     //console.log("This will allow me to customize entries by enabling edit and sort for locationName and address inputboxes")
     $("#sortable").sortable();
+    $("#sortable").sortable({
+        update: function(event, ui) {
+            locnOrder = $(this).sortable('toArray');
+        }
+    });
     if (custom() == true){
         //console.log("custom is true");
         $("#sortable").sortable("enable");
@@ -384,7 +391,9 @@ function searchLocations(){
         console.log("observable array: " + addr()[i].lname() +  " | " + addr()[i].strAddr());
     }
     // close dialog box
-    $("#dialog").dialog("close");
+    $( "#sortable" ).sortable( "refresh" );
+    $( "#sortable" ).sortable( "refreshPositions" );
+    //$("#dialog").dialog("close");
     //$("#dialog").dialog("open");
     // access directions service
 
@@ -404,15 +413,15 @@ function calcDisplayRoute(){
     var endpt;
     for (var i = 0; i < 5; i++){
         if(i == 0){
-            startpt = addr()[i].strAddr().toString();
+            startpt = addr()[locnOrder[i]].strAddr().toString();
         } else if(i == 4){
-            endpt = addr()[i].strAddr().toString();
+            endpt = addr()[locnOrder[i]].strAddr().toString();
         } else {
             waypts.push({
-                location: addr()[i].strAddr().toString()
+                location: addr()[locnOrder[i]].strAddr().toString()
             });
         }
-        console.log("no " + i + " assigned " + addr()[i].strAddr().toString());
+        console.log("no " + i + " assigned " + addr()[locnOrder[i]].lname().toString() + " | " + addr()[locnOrder[i]].strAddr().toString());
     }
 
     dirSvc.route({

@@ -59,3 +59,5 @@ For each of these, the user will be able to view items on the map, search for ne
 11. [Number Formatting Example](https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript)
 12. [Hidden dialog](https://stackoverflow.com/questions/10296628/does-jquery-dialog-display-as-hidden-by-default)
 13. [Replace bullets with fontawesome icons](https://stackoverflow.com/questions/12468359/using-font-awesome-icon-for-bullet-points-with-a-single-list-item-element)
+14. [Setting ID attributes in KnockoutJS](https://stackoverflow.com/questions/12508404/setting-the-id-attribute-with-knockoutjs-including-a-prefix)
+15. [Passing Re-sorted array values into a new array](https://www.tutorialspoint.com/jqueryui/jqueryui_sortable.htm)
