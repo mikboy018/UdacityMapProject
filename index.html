@@ -51,6 +51,7 @@
   <input type="button" data-bind="click: function(data, event) { loadFile(addr)}" value="Reset Search Options">
   <input type="checkbox" data-bind="checked: optimum, click: toggleOptimum"><span> Optimize Waypoints</span>
   <input type="button" data-bind="click: calcDisplayRoute" value="Directions">
+  <input type="button" data-bind="click: popUpGantt" value="Display Chart">
   <ul id="sortable" data-bind="foreach: addr">
   	<li class="locations" data-bind="attr: { id: $index() }">
   	  <input type="text" class="locationName" placeholder="name" data-bind="value: lname"><br/>
@@ -59,7 +60,11 @@
   </ul>
 </div>
 
-<!-- Load jQuery, Popper, Bootstrap, jQueryUI, Google Maps, KnockoutJS and maps.js-->
+<div class="hidden" id="ganttDialog" title="Durations" style="width: 965px; height: 480px">
+	<div id="myDiv" style="width: 800px; height: 400px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+</div>
+
+<!-- Load jQuery, Popper, Bootstrap, jQueryUI, Google Maps, KnockoutJS, and ko_maps.js, and plotly.js-->
 	<script
 	    src="https://code.jquery.com/jquery-3.3.1.js"
 	    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
@@ -89,8 +94,8 @@
   	<script 
   		src="js/ko_maps.js">
   	</script>
-	<script>
-
+	<script 
+	    src="https://cdn.plot.ly/plotly-latest.min.js">
   	</script>
   	
 </body>

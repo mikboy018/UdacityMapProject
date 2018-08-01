@@ -380,6 +380,13 @@ function popUpLocations(){
     $(".address").prop("disabled", true);
 }
 
+function popUpGantt(){
+    $("#ganttDialog").dialog({
+        width: '45%',
+        height: '400'
+    });
+}
+
 function toggleOptimum() {
     //console.log("toggle optimum called");
     return true;
@@ -390,6 +397,10 @@ function calcDisplayRoute(){
     var startpt;
     var waypts = [];
     var endpt;
+
+    var legNames = [];
+    var durations = [];
+    var starts = [];
     for (var i = 0; i < locnOrder.length; i++){
         if(i == 0){
             startpt = addr()[locnOrder[i]].strAddr().toString();
@@ -412,11 +423,30 @@ function calcDisplayRoute(){
     }, function(response, status) {
         if(status === 'OK') {
             dirDisp.setDirections(response);
-            var route = response.routes[0];
+            //var route = response.routes[0];
+            var duration = 0;
+            var start = 0;
+            var startName = '';
+            var endName = '';
+            var legName = '';
+            starts.push(start);
+            for(i = 0; i < response.routes[0].legs.length; i++){
+                duration = parseFloat(response.routes[0].legs[i].duration.value/(60*60));
+                start += duration;
+                //for each 'leg'(route between two waypoints) we get the distance and add it to the total
+                durations.push(duration);
+                starts.push(start);
+                startName = response.routes[0].legs[i].start_address;
+                endName = response.routes[0].legs[i].end_address;
+                legName = startName + " to " + endName;
+                legNames.push(legName);
+            } 
         } else {
             window.alert('Directions Request Failed, Reason: ' + status);
         }
     });
+
+    plotTrip(starts, durations, legNames);
 }
 
 function populateInfoWindow(marker, popUpWindow){
@@ -460,4 +490,71 @@ function populateInfoWindow(marker, popUpWindow){
     streetViewSvc.getPanoramaByLocation(marker.position, radius, getStreetView); 
     popUpWindow.open(map, marker);              
   }
+}
+
+function plotTrip(starts, durations, legNames){
+ /*
+ starts = starts.reverse();
+ durations = durations.reverse();
+ legNames = legNames.reverse();
+*/
+ var trace1 = {
+   x: starts,
+   y: legNames,
+   name: '',
+   orientation: 'h',
+   marker: {
+     color: 'rgba(55,128,191,0)',
+     width: 1
+   },
+   type: 'bar',
+   transforms: [{
+    type: 'sort',
+    target: 'x',
+    order: 'descending'
+  }]
+ };
+
+ var trace2 = {
+   x: durations,
+   y: legNames,
+   name: 'Duration',
+   orientation: 'h',
+   type: 'bar',
+   marker: {
+     color: 'rgba(55,153,151,0.6)',
+     width: 1
+    },
+   type: 'bar',
+   transforms: [{
+    type: 'sort',
+    target: 'x',
+    order: 'descending'
+  }]
+  }; 
+
+ var data = [trace1, trace2]; 
+
+ var layout = {
+   title: 'Colored Bar Chart',
+   barmode: 'stack',
+   yaxis: {
+    //autorange: true,
+    //categoryorder: 'category descending',
+    title: "Leg"
+   },
+   xaxis: {
+    title: "Duration (Hours)"
+   },
+   margin: {
+     r: 80,
+     t: 100,
+     b: 80,
+     l: 580
+   }
+ }; 
+
+ Plotly.newPlot('myDiv', data, layout);
+
+
 }
