@@ -120,12 +120,17 @@ var locnOrder = [];
 var custom = ko.observable(false);
 var optimum = ko.observable(false);
 
+var labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var labelIdx = 0;
+
+var locnVM;
+
 $(document).ready(function() {
   console.log("ready!");
 
   AddressesViewModel();
 
-  var locnVM = {
+  locnVM = {
     AddressesViewModel: ko.observableArray([]),
 
     placeMarker : function(){
@@ -200,7 +205,7 @@ $(document).ready(function() {
 
   popUpWindow = new google.maps.InfoWindow();
 
-
+  
 
 
   
@@ -347,12 +352,15 @@ function retrieveArea(polygon, area){
 
 function allowCustomize(){
     //console.log("This will allow me to customize entries by enabling edit and sort for locationName and address inputboxes")
-    $("#sortable").sortable();
+    
+    
+    
     $("#sortable").sortable({
-        update: function(event, ui) {
-            locnOrder = $(this).sortable('toArray');
-        }
+      update: function(event, ui) {
+        locnOrder = $(this).sortable('toArray');
+      }
     });
+
     if (custom() == true){
         //console.log("custom is true");
         $("#sortable").sortable("enable");
@@ -378,12 +386,14 @@ function popUpLocations(){
     $(".locations:before").prop("disabled", true);
     $(".locationName").prop("disabled", true);
     $(".address").prop("disabled", true);
+    $("#sortable").sortable();
+    locnOrder = $("#sortable").sortable("toArray");
 }
 
 function popUpGantt(){
     $("#ganttDialog").dialog({
         width: '45%',
-        height: '400'
+        height: '500'
     });
 }
 
@@ -436,10 +446,16 @@ function calcDisplayRoute(){
                 //for each 'leg'(route between two waypoints) we get the distance and add it to the total
                 durations.push(duration);
                 starts.push(start);
+                /*
                 startName = response.routes[0].legs[i].start_address;
                 endName = response.routes[0].legs[i].end_address;
                 legName = startName + " to " + endName;
+                legNames.push(legName);*/
+                startName = labels[labelIdx++ % labels.length];
+                endName = labels[labelIdx++ % labels.length];
+                legName = startName + " to " + endName;
                 legNames.push(legName);
+                labelIdx--;
             } 
         } else {
             window.alert('Directions Request Failed, Reason: ' + status);
@@ -447,6 +463,8 @@ function calcDisplayRoute(){
     });
 
     plotTrip(starts, durations, legNames);
+    locnVM.hideMarker();
+    labelIdx = 0;
 }
 
 function populateInfoWindow(marker, popUpWindow){
@@ -536,7 +554,7 @@ function plotTrip(starts, durations, legNames){
  var data = [trace1, trace2]; 
 
  var layout = {
-   title: 'Colored Bar Chart',
+   title: 'Colored Bar Chart - Double Click to View Data!',
    barmode: 'stack',
    yaxis: {
     //autorange: true,
@@ -545,13 +563,13 @@ function plotTrip(starts, durations, legNames){
    },
    xaxis: {
     title: "Duration (Hours)"
-   },
-   margin: {
+   }
+   /*margin: {
      r: 80,
      t: 100,
      b: 80,
      l: 580
-   }
+   }*/
  }; 
 
  Plotly.newPlot('myDiv', data, layout);
